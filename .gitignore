@@ -10,3 +10,4 @@ Thumbs.db
 .vscode/
 *.suo
 *.user
+scripts/__pycache__/
