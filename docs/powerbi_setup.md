@@ -18,7 +18,7 @@ and build the eight telemetry charts.
 |--------|--------|---------------------|---------------|--------------------------------|
 | 1      | A      | LAP                 | #             | Data starts at **row 3**       |
 | 2–3    | B–C    | *(reserved)*        |               |                                |
-| 4      | D      | LAPTIME             | MM.SS.mmm     | Convert to SSS.mmm (see §4)    |
+| 4      | D      | LAPTIME             | MM.SS.mmm     | Convert to SSS.mmm (see §5)    |
 | 5      | E      | FUEL/LAP            | L             |                                |
 | 6      | F      | T wat, Max          | °C            |                                |
 | 7      | G      | T wat, avg          | °C            |                                |
@@ -37,24 +37,59 @@ Row 1 contains the column headers. Row 2 contains units/sub-headers. Data begins
 
 ---
 
-## 3. Import Data into Power BI
+## 3. Import Data into Power BI – Quick Method (recommended)
+
+The file `scripts/telemetry_powerquery.pq` contains a **complete Power Query M
+script** that performs all import and transformation steps automatically.
+
+1. Open **Power BI Desktop**.
+2. Click **Home → Get Data → Blank Query**.
+3. In the Power Query Editor click **Home → Advanced Editor**.
+4. Select all existing text and replace it with the contents of
+   `scripts/telemetry_powerquery.pq`.
+5. Update the `FilePath` variable at the top of the script to the **absolute
+   path** of your `sample_telemetry.xlsx` (e.g.
+   `"C:/Users/you/DashboardPowerBI/data/sample_telemetry.xlsx"`).
+6. Click **Done**.
+7. Rename the query to **Telemetry** (right-click in the Queries pane).
+8. Click **Close & Apply**.
+
+The script performs these transformation steps automatically:
+
+| Step | Action |
+|------|--------|
+| 1 | Load the Excel workbook |
+| 2 | Select the **Telemetry** worksheet |
+| 3 | Promote row 1 as column headers |
+| 4 | Remove the units / sub-header row (row 2) |
+| 5 | Keep only the 15 relevant columns |
+| 6 | Remove trailing empty rows |
+| 7 | Convert `LAPTIME` (MM.SS.mmm) → numeric seconds (`LAPTIME_s`) |
+| 8 | Drop the original text `LAPTIME` column |
+| 9 | Reorder columns so `LAPTIME_s` appears right after `LAP` |
+| 10 | Apply correct data types (`Int64` for LAP, `number` for all others) |
+
+---
+
+## 4. Import Data into Power BI – Manual Method
+
+If you prefer to connect via the standard Excel connector:
 
 1. Open **Power BI Desktop**.
 2. Click **Home → Get Data → Excel Workbook**.
 3. Browse to `data/sample_telemetry.xlsx` and click **Open**.
 4. In the Navigator, select the **Telemetry** sheet and click **Transform Data**.
 5. In the **Power Query Editor**:
-   - Expand **Home → Use First Row as Headers** if headers are not already promoted.
-     *(Since row 1 is the header row and row 2 contains units, you may need to
-     remove the first row using **Home → Remove Top Rows → 1** after promoting
-     headers, to eliminate the units row.)*
+   - Click **Home → Use First Row as Headers** to promote row 1 as headers.
+   - Remove the units row: **Home → Remove Top Rows → 1**.
+   - Add a **Custom Column** (see §5 below) to convert `LAPTIME`.
    - Click **Close & Apply**.
 
 ---
 
-## 4. LAPTIME Conversion (MM.SS.mmm → SSS.mmm)
+## 5. LAPTIME Conversion (MM.SS.mmm → SSS.mmm)
 
-In Power Query (M formula) add a **Custom Column** named `LAPTIME_s`:
+When using the manual method, add a **Custom Column** named `LAPTIME_s`:
 
 ```m
 let
@@ -71,7 +106,7 @@ This converts e.g. `"1.23.456"` → `83.456` seconds.
 
 ---
 
-## 5. Create the Eight Charts
+## 6. Create the Eight Charts
 
 For every chart: select a **Line chart** visual, set:
 
@@ -94,7 +129,7 @@ For every chart: select a **Line chart** visual, set:
 
 ---
 
-## 6. HTML Preview Dashboard
+## 7. HTML Preview Dashboard
 
 Run the Python helper script to generate an interactive HTML preview of the same
 eight charts (no Power BI required):
