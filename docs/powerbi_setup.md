@@ -39,16 +39,48 @@ Row 1 contains the column headers. Row 2 contains units/sub-headers. Data begins
 
 ## 3. Import Data into Power BI
 
+### Option A – Navigator wizard (point-and-click)
+
 1. Open **Power BI Desktop**.
 2. Click **Home → Get Data → Excel Workbook**.
 3. Browse to `data/sample_telemetry.xlsx` and click **Open**.
 4. In the Navigator, select the **Telemetry** sheet and click **Transform Data**.
 5. In the **Power Query Editor**:
-   - Expand **Home → Use First Row as Headers** if headers are not already promoted.
-     *(Since row 1 is the header row and row 2 contains units, you may need to
-     remove the first row using **Home → Remove Top Rows → 1** after promoting
-     headers, to eliminate the units row.)*
+   - Click **Home → Use First Row as Headers** to promote row 1 as column names.
+   - Remove the units row: **Home → Remove Rows → Remove Top Rows → 1**.
+   - Set data types: select all columns, right-click a column header, and
+     choose **Change Type → Detect Data Type** (or set each column type manually
+     as described in §2 above).
+   - Add the `LAPTIME_s` custom column as described in §4 below.
    - Click **Close & Apply**.
+
+### Option B – Advanced Editor (recommended, one-step)
+
+The file `scripts/power_query.m` contains a complete, ready-to-paste M script
+that performs all the steps above automatically:
+
+1. Open **Power BI Desktop**.
+2. Click **Home → Get Data → Blank Query**.
+3. In the Query Editor window, click **Home → Advanced Editor**.
+4. Select all existing text and replace it with the contents of
+   `scripts/power_query.m`.
+5. On the `Source` line, update the file path to the absolute location of
+   `sample_telemetry.xlsx` on your machine, for example:
+
+   ```
+   File.Contents("C:/Projects/DashboardPowerBI/data/sample_telemetry.xlsx")
+   ```
+
+   > **Windows note:** use forward slashes (`/`) or double backslashes (`\\`).
+
+6. Click **Done**.  Power Query will preview the transformed table.
+7. In the **Queries** pane on the left, rename the query to **Telemetry**
+   (double-click its name).
+8. Click **Close & Apply**.
+
+The resulting table has 15 columns: `LAP`, `LAPTIME` (raw text), `FUEL/LAP`,
+eight temperature/pressure/voltage columns, two lift-pump columns, and the
+calculated `LAPTIME_s` column (total seconds).
 
 ---
 

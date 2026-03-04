@@ -14,6 +14,7 @@ docs/
 scripts/
   generate_sample_data.py ← creates / regenerates sample_telemetry.xlsx
   create_dashboard.py     ← reads the Excel file and writes dashboard.html
+  power_query.m           ← complete Power Query M script (paste into Advanced Editor)
 ```
 
 ## Eight Charts
