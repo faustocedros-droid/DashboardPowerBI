@@ -14,6 +14,7 @@ docs/
 scripts/
   generate_sample_data.py ← creates / regenerates sample_telemetry.xlsx
   create_dashboard.py     ← reads the Excel file and writes dashboard.html
+  telemetry_powerquery.pq ← complete Power Query M script for Power BI
 ```
 
 ## Eight Charts
@@ -40,9 +41,15 @@ python scripts/create_dashboard.py       # creates docs/dashboard.html
 
 ## Power BI Setup
 
-See **[docs/powerbi_setup.md](docs/powerbi_setup.md)** for the full step-by-step guide,
-including the Power Query M formula for the LAPTIME conversion
-(`MM.SS.mmm` → `SSS.mmm`).
+See **[docs/powerbi_setup.md](docs/powerbi_setup.md)** for the full step-by-step guide.
+
+**Quick method:** paste `scripts/telemetry_powerquery.pq` directly into
+Power BI Desktop's Advanced Editor (Home → Get Data → Blank Query → Advanced
+Editor) and update the `FilePath` variable to point at your local
+`data/sample_telemetry.xlsx`.
+
+The script handles all transformation steps automatically, including the Power
+Query M formula for the LAPTIME conversion (`MM.SS.mmm` → `SSS.mmm`).
 
 ## Contributing
 
