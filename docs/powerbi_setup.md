@@ -18,7 +18,7 @@ and build the eight telemetry charts.
 |--------|--------|---------------------|---------------|--------------------------------|
 | 1      | A      | LAP                 | #             | Data starts at **row 3**       |
 | 2–3    | B–C    | *(reserved)*        |               |                                |
-| 4      | D      | LAPTIME             | MM.SS.mmm     | Convert to SSS.mmm (see §4)    |
+| 4      | D      | LAPTIME             | MM.SS.mmm     | Convert to SSS.mmm (see §5)    |
 | 5      | E      | FUEL/LAP            | L             |                                |
 | 6      | F      | T wat, Max          | °C            |                                |
 | 7      | G      | T wat, avg          | °C            |                                |
